@@ -1,0 +1,24 @@
+<h2>DSL Test Job Creation</h2>
+<pre><code data-trim class="groovy">
+String basePath = 'MC Jobs'
+String repo = 'git@git.corp.adobe.com:adobe-apis/api-gateway-mc.git'
+
+folder(basePath) {
+    description 'Deploy Jobs'
+}
+
+job("$basePath/Deploy Gateway Config - MC STAGE") {
+    scm {
+        git repo
+    }
+    parameters {
+	choiceParam('SIDE', ['Side1 (default)', 'Side2'])
+    }
+    triggers {
+        scm 'H/5 * * * *'
+    }
+    steps {
+        shell readFileFromWorkspace('scripts/test.sh')
+    }
+}
+</code></pre>
